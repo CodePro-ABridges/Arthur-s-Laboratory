@@ -121,7 +121,7 @@ router.get("/fetchuser", authenticateToken, async (req, res) => {
 // Fetch Posts
 router.get("/getposts", async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await Post.find().populate("author", "name");
     /*    console.log("Server debug post: ", posts); */
     res.status(200).send(posts);
   } catch (err) {
