@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthRoute.jsx";
 
-const CommentFormModal = ({ onClose, postId }) => {
+const CommentFormModal = ({ onClose, postId, onCommentAdded }) => {
   const [body, setBody] = useState("");
   const { createComment } = useAuth();
 
@@ -9,7 +9,8 @@ const CommentFormModal = ({ onClose, postId }) => {
     e.preventDefault();
     console.log("CommentForm PostID: ", postId);
     try {
-      await createComment(postId, body);
+      const newComment = await createComment(postId, body);
+      onCommentAdded(newComment);
       onClose();
     } catch (err) {
       console.error("Error in CommentFormModal: ", err);

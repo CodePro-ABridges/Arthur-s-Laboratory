@@ -50,7 +50,7 @@ export const AuthProvider = ({ children }) => {
       console.log("Authroute POSTID: ", postId);
       //TODO: put conditional for better error handling.
       const token = localStorage.getItem("token");
-      await axios.post(
+      const response = await axios.post(
         `http://localhost:3000/api/post/${postId}/comment`,
         { body },
         {
@@ -58,6 +58,8 @@ export const AuthProvider = ({ children }) => {
         },
       );
       fetchComments(postId);
+      return response.data;
+      return;
     } catch (err) {
       console.error("Error creating comment: ", err);
     }

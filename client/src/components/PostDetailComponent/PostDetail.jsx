@@ -18,6 +18,10 @@ const PostDetail = () => {
     setIsCommentModalOpen(false);
   };
 
+  const handleCommentAdded = (newComment) => {
+    setComments((prevComments) => [...prevComments, newComment]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const fetchedPost = await fetchSinglePost(id);
@@ -66,7 +70,11 @@ const PostDetail = () => {
           Add Comment
         </button>
         {isCommentModalOpen && (
-          <CommentFormModal onClose={handleCloseCommentModal} postId={id} />
+          <CommentFormModal
+            onClose={handleCloseCommentModal}
+            postId={id}
+            onCommentAdded={handleCommentAdded}
+          />
         )}
       </div>
     </div>
