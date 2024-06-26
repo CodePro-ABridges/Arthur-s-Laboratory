@@ -140,9 +140,6 @@ const NavigationBar = ({ isNavOpen, setIsNavOpen, handlePostOpenModal }) => {
               <NavLink name="Dashboard" to="/dashboard" isNavOpen={isNavOpen}>
                 <MdDashboard className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
               </NavLink>
-              <NavLink name="Blogs" to="/blogs" isNavOpen={isNavOpen}>
-                <FaBloggerB className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
-              </NavLink>
               <NavLink
                 name="New Post"
                 to="/dashboard"
@@ -190,9 +187,6 @@ const NavigationBar = ({ isNavOpen, setIsNavOpen, handlePostOpenModal }) => {
               </NavLink>
               <NavLink name="Admin Login" to="/admin" isNavOpen={isNavOpen}>
                 <RiAdminFill className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
-              </NavLink>
-              <NavLink name="Blogs" to="/blogs" isNavOpen={isNavOpen}>
-                <FaBloggerB className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
               </NavLink>
               <NavLink name="Register" to="/register" isNavOpen={isNavOpen}>
                 <FaUserPlus className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
