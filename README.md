@@ -15,11 +15,14 @@ This is a full-stack blog application built with React for the frontend and Node
 
 ## Screenshots
 
-![Description of the screenshot](./client/src/assets/Screenshot 2024-06-26 at 10.31.15 AM.png)
+![Screenshot of Login page]<img width="1440" alt="Screenshot 2024-06-26 at 10 31 15 AM" src="https://github.com/CodePro-ABridges/Arthur-s-Laboratory/assets/78990603/0ab74b71-6ceb-4e52-9803-37eb3018d2c6">
 
 ## Demo Video
 
-[![Watch the video](./client/src/assets/Screen Recording 2024-06-26 at 10.31.39 AM.mov)]
+[![Watch the video]
+https://github.com/CodePro-ABridges/Arthur-s-Laboratory/assets/78990603/8e785c8d-658f-43d2-81af-6d55ec7d21a4
+
+
 
 ## Technologies Used
 
