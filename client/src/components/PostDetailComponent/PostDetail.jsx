@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthRoute.jsx";
+import CommentFormModal from "../ModalComponents/CommentFormModalComponent/CommentFormModal.jsx";
 
-//TODO: bring the prop for CommentFormModal.
-const PostDetail = ({ handleCommentOpenModal }) => {
-  //state
+const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
-  //
+  const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const { fetchSinglePost, fetchComments } = useAuth();
   const { id } = useParams();
 
-  //
+  const handleOpenCommentModal = () => {
+    setIsCommentModalOpen(true);
+  };
+
+  const handleCloseCommentModal = () => {
+    setIsCommentModalOpen(false);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       const fetchedPost = await fetchSinglePost(id);
@@ -47,7 +53,7 @@ const PostDetail = ({ handleCommentOpenModal }) => {
 
                 <p className="text-sm text-neutral-600">
                   {" "}
-                  - {comment.author.name}
+                  - {comment.author?.name}
                 </p>
               </div>
             ))
@@ -55,10 +61,13 @@ const PostDetail = ({ handleCommentOpenModal }) => {
         </div>
         <button
           className="mt-4 px-4 py-2 bg-yellow-300 text-white rounded hover:bg-yellow-700"
-          onClick={handleCommentOpenModal}
+          onClick={handleOpenCommentModal}
         >
           Add Comment
         </button>
+        {isCommentModalOpen && (
+          <CommentFormModal onClose={handleCloseCommentModal} postId={id} />
+        )}
       </div>
     </div>
   );

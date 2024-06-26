@@ -1,17 +1,15 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthRoute.jsx";
-import { useParams } from "react-router-dom";
 
-const CommentFormModal = ({ onClose }) => {
+const CommentFormModal = ({ onClose, postId }) => {
   const [body, setBody] = useState("");
   const { createComment } = useAuth();
-  const { id } = useParams();
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    console.log("CommentForm PostID: ", postId);
     try {
-      console.log("Client DEBUG ID: ", id, " , Body: ", body);
-      await createComment(id, body);
+      await createComment(postId, body);
       onClose();
     } catch (err) {
       console.error("Error in CommentFormModal: ", err);

@@ -172,15 +172,14 @@ router.post("/post/:id/comment", authenticateToken, async (req, res) => {
   const { body } = req.body;
   const postId = req.params.id;
   const userId = req.user._id;
-  console.log("PostID: ", postId);
-  console.log("UserID: ", userId);
+  console.log("BACKEND PostID: ", postId);
   try {
     const comment = new Comment({
       author: userId,
       body,
       post: postId,
     });
-    /*   console.log("Server comment debug: ", comment); */
+    console.log("Server comment debug: ", comment);
     await comment.save();
     res.status(201).json(comment);
   } catch (err) {

@@ -21,8 +21,8 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     if (token) {
       setIsAuthenticated(true);
-      getUser(); //fetch user when the component mounts.
-      fetchAllPosts(); //fetch posts when the component mounts.
+      getUser();
+      fetchAllPosts();
     }
   }, []);
 
@@ -47,6 +47,7 @@ export const AuthProvider = ({ children }) => {
   //create Comment
   const createComment = async (postId, body) => {
     try {
+      console.log("Authroute POSTID: ", postId);
       //TODO: put conditional for better error handling.
       const token = localStorage.getItem("token");
       await axios.post(
