@@ -4,8 +4,9 @@ import jwt from "jsonwebtoken";
 import { importJWK, CompactEncrypt } from "jose";
 import User from "../models/userSchema.js";
 import Post from "../models/postSchema.js";
+import Comment from "../models/commentSchema.js";
 import dotenv from "dotenv";
-import authenticateToken from "../middleware/authMiddleware.js"; // Import the middleware
+import authenticateToken from "../middleware/authMiddleware.js";
 
 // Load environment variables from the .env file.
 dotenv.config();
@@ -118,7 +119,7 @@ router.get("/fetchuser", authenticateToken, async (req, res) => {
   res.status(200).send(req.user);
 });
 
-// Fetch Posts
+// Fetch All Posts
 router.get("/getposts", async (req, res) => {
   try {
     const posts = await Post.find().populate("author", "name");
@@ -132,12 +133,28 @@ router.get("/getposts", async (req, res) => {
   }
 });
 
+// Fetch Single Post
+router.get("/post/:id", authenticateToken, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("author", "name");
+    if (!post) {
+      return res.status(404).send({ error: "Post not found" });
+    }
+    return res.status(200).send(post);
+  } catch (err) {
+    console.error("Fetch single post error: ", err);
+    res
+      .status(500)
+      .send({ error: "Internal server error while fetching single post" });
+  }
+});
+
 // Create Post
 router.post("/createpost", authenticateToken, async (req, res) => {
   // Use middleware
   const { title, body } = req.body;
   try {
-    const newPost = new Post({ author: req.user._id, title, body }); // Use req.user.name as the author
+    const newPost = new Post({ author: req.user._id, title, body });
     await newPost.save();
     res.status(201).json(newPost);
   } catch (err) {
@@ -148,14 +165,47 @@ router.post("/createpost", authenticateToken, async (req, res) => {
   }
 });
 
-// Create Comments
-router.post("/createcomment", async (req, res) => {
+// Create Comment
+// TODO: error handling.
+router.post("/post/:id/comment", authenticateToken, async (req, res) => {
   //
+  const { body } = req.body;
+  const postId = req.params.id;
+  const userId = req.user._id;
+  console.log("PostID: ", postId);
+  console.log("UserID: ", userId);
+  try {
+    const comment = new Comment({
+      author: userId,
+      body,
+      post: postId,
+    });
+    /*   console.log("Server comment debug: ", comment); */
+    await comment.save();
+    res.status(201).json(comment);
+  } catch (err) {
+    console.error("Create comment error: ", err);
+    res
+      .status(500)
+      .send({ error: "Internal server error creating the comment" });
+  }
 });
 
 // Fetch Comments
-router.get("/getcomments", async (req, res) => {
+router.get("/post/:id/comments", authenticateToken, async (req, res) => {
   //
+  try {
+    const comments = await Comment.find({ post: req.params.id }).populate(
+      "author",
+      "name",
+    );
+    res.status(200).send(comments);
+  } catch (err) {
+    console.error("Fetch comments error: ", err);
+    res.status(500).send({
+      error: "Internal server error fetching commments within a post",
+    });
+  }
 });
 
 export default router;
