@@ -46,7 +46,7 @@ const svgVariants = {
   },
 };
 
-const NavigationBar = ({ isNavOpen, setIsNavOpen, handleOpenModal }) => {
+const NavigationBar = ({ isNavOpen, setIsNavOpen, handlePostOpenModal }) => {
   //State & Context
   const [searchQuery, setSearchQuery] = useState("");
   const { isAuthenticated, logout, user } = useAuth();
@@ -147,7 +147,7 @@ const NavigationBar = ({ isNavOpen, setIsNavOpen, handleOpenModal }) => {
                 name="New Post"
                 to="/dashboard"
                 isNavOpen={isNavOpen}
-                onClick={handleOpenModal}
+                onClick={handlePostOpenModal}
               >
                 <FaPlus className="stroke-inherit stroke-[0.75] min-w-8 w-8" />
               </NavLink>
