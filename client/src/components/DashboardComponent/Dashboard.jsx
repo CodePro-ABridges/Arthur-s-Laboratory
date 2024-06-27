@@ -6,7 +6,7 @@ import MainContent from "./contentComponent/dashboardContent.jsx";
 const Dashboard = () => {
   return (
     <Root>
-      <main>
+      <main className="p-6">
         <h1 className="ml-7">Dashboard</h1>
         <PostForm />
         <MainContent />
