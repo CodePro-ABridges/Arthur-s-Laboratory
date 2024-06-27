@@ -90,7 +90,7 @@ router.post("/login", async (req, res) => {
 
     const tokenPayload = { userId: user._id };
     const token = jwt.sign(tokenPayload, process.env.JWT_SECRET, {
-      expiresIn: "15m",
+      expiresIn: "1h", //value will change to 15m when deployed.
     });
 
     if (!encryptionKey) {

@@ -8,7 +8,7 @@ const HeroSection = () => {
         <main>
           <div className="flex items-center">
             {/*TODO: will change name once I come up with a better name.*/}
-            <h1 className="mr-4 text-2xl">Welcome to the TechTalk</h1>
+            <h1 className="mr-4 text-2xl">Welcome to the Laboratory</h1>
             <img
               src={Logo}
               alt="Black and Yellow Molecular Logo"

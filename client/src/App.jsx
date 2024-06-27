@@ -9,6 +9,7 @@ import PostDetail from "./components/PostDetailComponent/PostDetail.jsx";
 import Dashboard from "./components/DashboardComponent/Dashboard.jsx";
 import RegisterForm from "./components/RegisterComponent/register.jsx";
 import LoginForm from "./components/LoginComponent/login.jsx";
+import Footer from "./components/footer/Footer.jsx";
 import "./index.css";
 
 function App() {
@@ -34,8 +35,8 @@ function App() {
             handlePostOpenModal={handlePostOpenModal}
           />
           <section
-            className={`flex flex-col p-10 ${
-              isNavOpen ? "ml-64" : "ml-20"
+            className={`flex flex-col p-6 ${
+              isNavOpen ? "ml-64" : "ml-10"
             } w-full gap-5 transition-all duration-500`}
           >
             <Routes>
@@ -48,6 +49,7 @@ function App() {
               <Route path="/login" element={<LoginForm />} />
               <Route path="/post/:id" element={<PostDetail />} />
             </Routes>
+            <Footer />
           </section>
         </Router>
         {isPostModalOpen && <PostFormModal onClose={handlePostCloseModal} />}

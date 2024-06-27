@@ -1,29 +1,44 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthRoute.jsx";
+import AuthModal from "../authModal/authModal.jsx";
 
 const PostFormModal = ({ onClose }) => {
   //state
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [error, setError] = useState("");
   const { createPost } = useAuth();
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
+    if (!title || !body) {
+      setError("Please fill in all fields");
+      return;
+    }
     try {
-      await createPost({ title, body });
-      onClose();
+      const { success, error: createPostError } = await createPost({
+        title,
+        body,
+      });
+      if (success) {
+        onClose();
+      } else {
+        setError(createPostError);
+      }
     } catch (err) {
-      console.error("Error in postformmodal: ", err);
+      setError("Post creation failed: " + err.message);
     }
   };
 
   return (
     <>
       <div
-        className="flex absolute top-0 w-screen h-screen z-20 justify-center items-center rounded"
+        className="flex fixed top-0 w-screen h-screen z-20 justify-center items-center rounded"
         style={{ backgroundColor: "rgba(0,0,0,.8)" }}
         onClick={onClose}
       >
+        {error && <AuthModal message={error} onClose={() => setError("")} />}
+
         <div
           className="border border-neutral-700 bg-neutral-700 p-5 mx-auto self-center rounded w-3/4 md:w-2/4"
           onClick={(e) => e.stopPropagation()}
@@ -44,7 +59,13 @@ const PostFormModal = ({ onClose }) => {
             />
             <div className="text-center">
               <button
-                className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700"
+                className="mt-4 px-4 py-2 mr-3 bg-red-500 text-white rounded hover:bg-red-700"
+                onClick={onClose}
+              >
+                Cancel
+              </button>
+              <button
+                className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-700"
                 type="submit"
               >
                 Post

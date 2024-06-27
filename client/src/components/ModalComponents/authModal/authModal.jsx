@@ -4,7 +4,7 @@ const AuthModal = ({ message, onClose }) => {
   return (
     <>
       <div
-        className="flex absolute top-0 w-screen h-screen z-20 justify-center items-center rounded"
+        className="flex absolute top-0 w-screen h-screen z-99 justify-center items-center rounded"
         style={{ backgroundColor: "rgba(0,0,0,.6)" }}
         onClick={onClose}
       >

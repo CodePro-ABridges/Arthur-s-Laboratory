@@ -7,7 +7,7 @@ const Dashboard = () => {
   return (
     <Root>
       <main>
-        <h1>Dashboard</h1>
+        <h1 className="ml-7">Dashboard</h1>
         <PostForm />
         <MainContent />
       </main>

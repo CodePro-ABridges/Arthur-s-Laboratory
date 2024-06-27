@@ -41,13 +41,17 @@ export const AuthProvider = ({ children }) => {
       return { success: true };
     } catch (err) {
       console.error("AuthContext Error creating post: ", err);
+      return {
+        success: false,
+        error: err.response?.data?.error || err.message,
+      };
     }
   };
 
   //create Comment
   const createComment = async (postId, body) => {
     try {
-      console.log("Authroute POSTID: ", postId);
+      /*  console.log("Authroute POSTID: ", postId); */
       //TODO: put conditional for better error handling.
       const token = localStorage.getItem("token");
       const response = await axios.post(
