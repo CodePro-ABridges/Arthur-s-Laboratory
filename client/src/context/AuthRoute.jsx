@@ -49,23 +49,23 @@ export const AuthProvider = ({ children }) => {
   };
 
   //create Comment
-  const createComment = async (postId, body) => {
+  const createComment = async (postId, body, parentId = null) => {
     try {
       /*  console.log("Authroute POSTID: ", postId); */
       //TODO: put conditional for better error handling.
       const token = localStorage.getItem("token");
       const response = await axios.post(
         `http://localhost:3000/api/post/${postId}/comment`,
-        { body },
+        { body, parentId },
         {
           headers: { Authorization: `Bearer ${token}` },
         },
       );
       fetchComments(postId);
-      return response.data;
-      return;
+      return { success: true, data: response.data };
     } catch (err) {
       console.error("Error creating comment: ", err);
+      return { success: false, error: err.response.data.error };
     }
   };
 

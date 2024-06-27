@@ -2,20 +2,24 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthRoute.jsx";
 import CommentFormModal from "../ModalComponents/CommentFormModalComponent/CommentFormModal.jsx";
+import { renderReplies } from "./RepliesSubComponent/Replies.jsx";
 
 const PostDetail = () => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [reply, setReply] = useState(null);
   const { fetchSinglePost, fetchComments } = useAuth();
   const { id } = useParams();
 
-  const handleOpenCommentModal = () => {
+  const handleOpenCommentModal = (parentId = null) => {
+    setReply(parentId);
     setIsCommentModalOpen(true);
   };
 
   const handleCloseCommentModal = () => {
     setIsCommentModalOpen(false);
+    setReply(null);
   };
 
   const handleCommentAdded = (newComment) => {
@@ -31,10 +35,10 @@ const PostDetail = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, fetchComments]);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-10">
       {post && (
         <div className="bg-neutral-900 p-4 rounded-md">
           <h2 className="text-xl mb-3">{post.title}</h2>
@@ -51,22 +55,37 @@ const PostDetail = () => {
           {comments.length === 0 ? (
             <div className="text-neutral-600">No Comments yet</div>
           ) : (
-            comments.map((comment) => (
-              <div key={comment._id} className="mb-2">
-                <p className="text-neutral-400">{comment.body}</p>
-
-                <p className="text-sm text-neutral-600">
-                  {" "}
-                  - {comment.author?.name}
-                </p>
-              </div>
-            ))
+            comments
+              .filter((comment) => !comment.parent)
+              .map((comment) => (
+                <div key={comment._id} className="mb-2">
+                  <p className="text-neutral-400">{comment.body}</p>
+                  <p className="text-sm text-neutral-600">
+                    {" "}
+                    - {comment.author.name} at{" "}
+                    {new Date(comment.createdAt).toLocaleString()}
+                  </p>
+                  <div className="flex justify-center">
+                    <button
+                      className="mt-4 px-2 bg-neutral-700 text-white rounded hover:bg-neutral-500"
+                      onClick={() => handleOpenCommentModal(comment._id)}
+                    >
+                      Reply
+                    </button>
+                    {renderReplies(
+                      comments,
+                      comment._id,
+                      handleOpenCommentModal,
+                    )}
+                  </div>
+                </div>
+              ))
           )}
         </div>
         <div className="flex justify-end">
           <button
             className="mt-4 px-4 py-2 bg-yellow-300 text-white rounded hover:bg-yellow-700"
-            onClick={handleOpenCommentModal}
+            onClick={() => handleOpenCommentModal()}
           >
             Add Comment
           </button>
@@ -76,6 +95,7 @@ const PostDetail = () => {
             onClose={handleCloseCommentModal}
             postId={id}
             onCommentAdded={handleCommentAdded}
+            parentId={setReply}
           />
         )}
       </div>

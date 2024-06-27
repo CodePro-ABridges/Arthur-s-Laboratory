@@ -1,29 +1,45 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../context/AuthRoute.jsx";
+import AuthModal from "../authModal/authModal.jsx";
 
-const CommentFormModal = ({ onClose, postId, onCommentAdded }) => {
+const CommentFormModal = ({ onClose, postId, onCommentAdded, parentId }) => {
   const [body, setBody] = useState("");
+  const [error, setError] = useState("");
   const { createComment } = useAuth();
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    console.log("CommentForm PostID: ", postId);
     try {
-      const newComment = await createComment(postId, body);
-      onCommentAdded(newComment);
-      onClose();
+      if (!body) {
+        setError("Please fill in the Body");
+        return;
+      }
+      const {
+        success,
+        data,
+        error: createCommentError,
+      } = await createComment(postId, body, parentId);
+      console.log(data);
+      //conditional
+      if (success === 201) {
+        onCommentAdded(data);
+        onClose();
+      } else {
+        setError(createCommentError);
+      }
     } catch (err) {
-      console.error("Error in CommentFormModal: ", err);
+      setError("Comment creation failed: " + err.message);
     }
   };
 
   return (
     <>
       <div
-        className="flex absolute top-0 w-screen h-screen z-20 justify-center items-center rounded"
+        className="flex fixed top-0 w-screen h-screen z-20 justify-center items-center rounded"
         style={{ backgroundColor: "rgba(0,0,0,.8)" }}
         onClick={onClose}
       >
+        {error && <AuthModal message={error} onClose={() => setError("")} />}
         <div
           className="border border-neutral-700 bg-neutral-700 p-5 mx-auto self-center rounded w-3/4 md:w-2/4"
           onClick={(e) => e.stopPropagation()}

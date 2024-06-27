@@ -169,17 +169,18 @@ router.post("/createpost", authenticateToken, async (req, res) => {
 // TODO: error handling.
 router.post("/post/:id/comment", authenticateToken, async (req, res) => {
   //
-  const { body } = req.body;
+  const { body, parentId } = req.body;
   const postId = req.params.id;
   const userId = req.user._id;
-  console.log("BACKEND PostID: ", postId);
+  //console.log("BACKEND PostID: ", postId);
   try {
     const comment = new Comment({
       author: userId,
       body,
       post: postId,
+      parent: parentId || null,
     });
-    console.log("Server comment debug: ", comment);
+    //console.log("Server comment debug: ", comment);
     await comment.save();
     res.status(201).json(comment);
   } catch (err) {
@@ -194,10 +195,9 @@ router.post("/post/:id/comment", authenticateToken, async (req, res) => {
 router.get("/post/:id/comments", authenticateToken, async (req, res) => {
   //
   try {
-    const comments = await Comment.find({ post: req.params.id }).populate(
-      "author",
-      "name",
-    );
+    const comments = await Comment.find({ post: req.params.id })
+      .populate("author", "name")
+      .populate("parent", "author body createdAt");
     res.status(200).send(comments);
   } catch (err) {
     console.error("Fetch comments error: ", err);
