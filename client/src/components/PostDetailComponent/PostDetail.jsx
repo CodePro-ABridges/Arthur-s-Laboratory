@@ -34,7 +34,7 @@ const PostDetail = () => {
   }, [id]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-6">
       {post && (
         <div className="bg-neutral-900 p-4 rounded-md">
           <h2 className="text-xl mb-3">{post.title}</h2>
@@ -63,12 +63,14 @@ const PostDetail = () => {
             ))
           )}
         </div>
-        <button
-          className="mt-4 px-4 py-2 bg-yellow-300 text-white rounded hover:bg-yellow-700"
-          onClick={handleOpenCommentModal}
-        >
-          Add Comment
-        </button>
+        <div className="flex justify-end">
+          <button
+            className="mt-4 px-4 py-2 bg-yellow-300 text-white rounded hover:bg-yellow-700"
+            onClick={handleOpenCommentModal}
+          >
+            Add Comment
+          </button>
+        </div>
         {isCommentModalOpen && (
           <CommentFormModal
             onClose={handleCloseCommentModal}

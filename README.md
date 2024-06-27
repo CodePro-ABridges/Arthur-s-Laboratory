@@ -22,8 +22,6 @@ This is a full-stack blog application built with React for the frontend and Node
 [![Watch the video]
 https://github.com/CodePro-ABridges/Arthur-s-Laboratory/assets/78990603/8e785c8d-658f-43d2-81af-6d55ec7d21a4
 
-
-
 ## Technologies Used
 
 ### Frontend
@@ -59,7 +57,7 @@ Make sure you have the following installed on your machine:
 
 1. **Clone the repository:**
 
-   ````sh
+   ```sh
     git clone https://github.com/CodePro-ABridges/Arthur-s-Laboratory
     cd your-repo
     cd frontend
@@ -67,5 +65,5 @@ Make sure you have the following installed on your machine:
     cd ../backend
     npm install
     create you .env file(given the .env.EXAMPLE)
-    ideas and comment on existing posts.```
-   ````
+    ideas and comment on existing posts.
+   ```
