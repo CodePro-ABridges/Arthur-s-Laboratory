@@ -96,7 +96,6 @@ export const AuthProvider = ({ children }) => {
   const fetchAllPosts = async () => {
     try {
       const response = await axios.get("http://localhost:3000/api/getposts");
-
       setPosts(response.data);
     } catch (err) {
       console.error("Error fetching posts: ", err);
