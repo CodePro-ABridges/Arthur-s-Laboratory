@@ -29,6 +29,7 @@ const PostDetail = () => {
   };
 
   useEffect(() => {
+    //Reload data upon submission (refreshing component).
     const fetchData = async () => {
       try {
         const fetchedComments = await fetchComments(id);
@@ -40,7 +41,7 @@ const PostDetail = () => {
       }
     };
     fetchData();
-  }, [id]);
+  }, [id, fetchComments]);
 
   return (
     <div className="container mx-auto p-10">
