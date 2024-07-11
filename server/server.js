@@ -18,6 +18,7 @@ app.use(express.json());
 
 //Apply routes
 app.use("/api", router);
+app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 3000;
 
