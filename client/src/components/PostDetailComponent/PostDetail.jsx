@@ -41,6 +41,7 @@ const PostDetail = () => {
       }
     };
     fetchData();
+    fetchComments(id);
   }, [id, fetchComments]);
 
   return (

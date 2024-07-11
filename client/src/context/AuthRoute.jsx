@@ -23,8 +23,36 @@ export const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       getUser();
       fetchAllPosts();
+      fetchComments();
     }
   }, []);
+
+  //UPLOADING //
+
+  //Upload ProfilePicture
+  const uploadProfilePicture = async (formData) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.post(
+        "http://localhost:3000/api/uploadProfilePicture",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+      setUser((prevUser) => ({
+        ...prevUser,
+        profilePicture: response.data.profilePicture,
+      }));
+      return { success: true, profilePicture: response.data.profilePicture };
+    } catch (err) {
+      console.error("Error uploading profile picture: ", err);
+      return { success: true, error: err.response?.data?.error || err.message };
+    }
+  };
 
   //CREATING //
 
@@ -197,6 +225,7 @@ export const AuthProvider = ({ children }) => {
         createComment,
         comments,
         post,
+        uploadProfilePicture,
       }}
     >
       {children}

@@ -7,6 +7,7 @@ import Post from "../models/postSchema.js";
 import Comment from "../models/commentSchema.js";
 import dotenv from "dotenv";
 import authenticateToken from "../middleware/authMiddleware.js";
+import upload from "../routes/uploadMiddleware.js";
 
 // Load environment variables from the .env file.
 dotenv.config();
@@ -206,5 +207,29 @@ router.get("/post/:id/comments", authenticateToken, async (req, res) => {
     });
   }
 });
+
+//upload picture
+router.post(
+  "/uploadProfilePicture",
+  authenticateToken,
+  upload.single("profilePicture"),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id);
+      if (!user) {
+        return res.status(404).send({ error: "User not found" });
+      }
+      //
+      user.profilePicture = `/uploads/${req.file.filename}`;
+      await user.save();
+      res
+        .status(200)
+        .send({ success: true, profilePicture: user.profilePicture });
+    } catch (err) {
+      console.error("Profile picture upload error: ", err);
+      res.status(500).send({ error: "Failed to upload profile picture" });
+    }
+  },
+);
 
 export default router;
