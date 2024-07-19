@@ -60,9 +60,10 @@ Make sure you have the following installed on your machine:
    ```sh
     git clone https://github.com/CodePro-ABridges/Arthur-s-Laboratory
     cd your-repo
-    cd frontend
+    npm install(install root dependencies).
+    cd client
     npm install
-    cd ../backend
+    cd ../server
     npm install
     create you .env file(given the .env.EXAMPLE)
     ideas and comment on existing posts.
