@@ -8,6 +8,7 @@ import Comment from "../models/commentSchema.js";
 import dotenv from "dotenv";
 import authenticateToken from "../middleware/authMiddleware.js";
 import upload from "../routes/uploadMiddleware.js";
+import { createSecretKey } from "crypto";
 
 // Load environment variables from the .env file.
 dotenv.config();
@@ -15,26 +16,31 @@ dotenv.config();
 const router = Router();
 
 // Function to initialize encryption key
-const initializedEncryptionKey = async () => {
-  try {
-    const key = await importJWK({
-      kty: "oct",
-      k: process.env.JWT_ENCRYPTION_SECRET,
-    });
-    console.log("Encryption key initialized");
-    return key;
-  } catch (err) {
-    console.error("Failed to initialize encryption key", err);
-    process.exit(1);
-  }
+// const initializedEncryptionKey = async () => {
+//   try {
+//     const key = await importJWK({
+//       kty: "oct",
+//       k: process.env.JWT_ENCRYPTION_SECRET,
+//     });
+//     console.log("Encryption key initialized");
+//     return key;
+//   } catch (err) {
+//     console.error("Failed to initialize encryption key", err);
+//     process.exit(1);
+//   }
+// };
+const getEncryptionKey = () => {
+  return createSecretKey(
+    Buffer.from(process.env.JWT_ENCRYPTION_SECRET, "utf8"),
+  );
 };
 
 // Initialize the encryption key
-let encryptionKey;
-(async () => {
-  encryptionKey = await initializedEncryptionKey();
-})();
-
+// let encryptionKey;
+// (async () => {
+//   encryptionKey = await initializedEncryptionKey();
+// })();
+//
 // Register route
 router.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
@@ -54,16 +60,16 @@ router.post("/register", async (req, res) => {
       expiresIn: "15m",
     });
 
-    if (!encryptionKey) {
-      return res.status(500).send({ error: "Encryption key not initialized" });
-    }
+    // if (!getEncryptionKey) {
+    //   return res.status(500).send({ error: "Encryption key not initialized" });
+    // }
 
     try {
       const encryptedToken = await new CompactEncrypt(
         new TextEncoder().encode(token),
       )
         .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
-        .encrypt(encryptionKey);
+        .encrypt(getEncryptionKey());
       res.status(201).send({ token: encryptedToken });
     } catch (encryptionError) {
       console.error("Token encryption failed", encryptionError);
@@ -94,16 +100,16 @@ router.post("/login", async (req, res) => {
       expiresIn: "1h", //value will change to 15m when deployed.
     });
 
-    if (!encryptionKey) {
-      return res.status(500).send({ error: "Encryption key not initialized" });
-    }
-
+    // if (!encryptionKey) {
+    //   return res.status(500).send({ error: "Encryption key not initialized" });
+    // }
+    //
     try {
       const encryptedToken = await new CompactEncrypt(
         new TextEncoder().encode(token),
       )
         .setProtectedHeader({ alg: "dir", enc: "A256GCM" })
-        .encrypt(encryptionKey);
+        .encrypt(getEncryptionKey());
       res.status(200).send({ token: encryptedToken });
     } catch (encryptionError) {
       console.error("Token encryption failed", encryptionError);

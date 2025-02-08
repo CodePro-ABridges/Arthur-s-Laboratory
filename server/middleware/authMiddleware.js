@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 import User from "../models/userSchema.js";
 import { compactDecrypt, importJWK } from "jose";
+import { createSecretKey } from "crypto";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers.authorization;
@@ -10,10 +14,9 @@ const authenticateToken = async (req, res, next) => {
 
   try {
     // Load encryption key
-    const key = await importJWK({
-      kty: "oct",
-      k: process.env.JWT_ENCRYPTION_SECRET,
-    });
+    const key = createSecretKey(
+      Buffer.from(process.env.JWT_ENCRYPTION_SECRET, "utf8"),
+    );
 
     // Decrypt the token
     const { plaintext } = await compactDecrypt(token, key);
